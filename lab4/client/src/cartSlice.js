@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 export const cartSlice = createSlice({
     name: 'cart',
-    initialState: { listSP: [], }, //cấu trúc listSP sẽ như yêu cầu ở trên
+    initialState: { listSP: [] }, //cấu trúc listSP sẽ như yêu cầu ở trên
     reducers: {
         themSP: (state, param) => {
             let sp = param.payload; //tham số là sp = {'id':1, 'ten_sp' => 'A'}
@@ -18,7 +19,6 @@ export const cartSlice = createSlice({
             if (index !==-1) {
                 state.listSP [index].so_luong = Number(so_luong);
             }
-            console.log("Đã sửa sp", param)
         },
         xoaSP: (state, param) => { //tham số là id_sp
             let id = param.payload;
@@ -33,4 +33,5 @@ export const cartSlice = createSlice({
 export const { 
     themSP, suaSL, xoaSP, xoaGH
 } = cartSlice.actions
-export default cartSlice.reducer;
+
+export const cartSliceReducer = cartSlice.reducer;

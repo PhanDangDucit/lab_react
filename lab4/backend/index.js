@@ -50,6 +50,15 @@ app.get('/sp/:id', async function(req, res) {
     return res.json(result[0]);
 });
 
+app.get('/sphot', async function(req, res) {
+    const db = await connectDb();
+    let sql = `SELECT * FROM san_pham WHERE hot = 1`
+    
+    const [result] = await db.query(sql);
+    if (!result) return res.json({"thongbao":"Lỗi lấy sp hot", err })
+    return res.json(result);
+});
+
 app.get('/sptrongloai/:id_loai', async function (req, res) {
     const db = await connectDb();
     let id_loai = parseInt(req.params.id_loai );
@@ -63,28 +72,50 @@ app.get('/sptrongloai/:id_loai', async function (req, res) {
     return res.json(result);
 });
 
+app.get('/loai/:id_loai', async function (req, res) {
+    const db = await connectDb();
+    let id_loai = parseInt(req.params.id_loai );
+    if (isNaN(id_loai) | id_loai<=0) {
+        res.json({"thong bao": "Không biết loại", "id_loai": id_loai}); return;
+    }
+    let sql = `SELECT id, ten_loai FROM loai WHERE id=?`;
+    
+    const [result] = await db.query(sql, id_loai);
+    if (!result) return  res.json({"thongbao": "Lỗi lấy loại: ", err })
+    return res.json(result);
+});
+
 app.post('/luudonhang/', async function (req, res) {
+    const db = await connectDb();
+
     let data = req.body;
     let sql= `INSERT INTO don_hang SET ? `;
-    const [result] = await db.query( sql , data);
-    if (!result) return res.json({
-        "id_dh": -1, 
-        "thongbao": "Lỗi lưu đơn hàng"
-    })
+    console.log("data: ", data);
 
-    id_dh = data.insertId
-    return res.json({"id_dh": id_dh, "thongbao": "Đã lưu đơn hàng"});
+    try {
+        await db.query(sql, data);
+        // id_dh = data.insertId;
+        console.log("data: ", data);
+
+        return res.json({"id_dh": 1, "thongbao": "Đã lưu đơn hàng"});
+    } catch (error) {
+        // throw new Error(error);
+        return res.json({"id_dh":-1, "thongbao": "Lỗi lưu đơn hàng", error })
+    }
 });
-
-
 app.post('/luugiohang/', async function (req, res) {
+    const db = await connectDb();
+
     let data = req.body;
-    let sql= `INSERT INTO don_hang_chi_tiet SET ? `;
-    
-    const [result] = await db.query(sql, data);
-    if (!result) return  res.json({"thongbao": "Lỗi lưu sp"})
-    return res.json({"thongbao": "Đã lưu sp vào db", "id_sp": data.id_sp});
-});
+    let sql = `INSERT INTO don_hang_chi_tiet SET ? `;
+    console.log("data: ", data);
+    try {
+        await db.query(sql, data);
+        res.json({"thongbao": "Đã lưu sp vào db", "id_sp": data.id_sp})
+    } catch (error) {
+        return res.json({"thongbao": "Lỗi lưu sp", error })
+    }
+})
 
 // nơi định nghĩa các đường route
 

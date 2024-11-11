@@ -13,6 +13,7 @@ function Home () {
             .then(res => res.json())
             .then( data => ganListSP(data))
     }, [])
+    
     return (
         <>
             <h1 className="fs-4 bg-white text-black p-2">Home</h1>

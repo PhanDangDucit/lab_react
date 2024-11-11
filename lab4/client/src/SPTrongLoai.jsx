@@ -57,22 +57,16 @@ export function SPTrongLoai() {
     const [loai, ganLoai] = useState("");
     useEffect( () => {
         fetch(`http://localhost:3500/sptrongloai/${id_loai}`)
-        .then( res => res.json()).then( data => ganListSP(data) );
+            .then( res => res.json()).then( data => ganListSP(data) );
+
         fetch(`http://localhost:3500/loai/${id_loai}`)
-        .then( res => res.json()).then( data => ganLoai(data) );
+            .then( res => res.json())
+            .then(([{id, ten_loai}]) => ganLoai({id, ten_loai}));
     } , [id_loai] );
   
     return (
         <div id="listsp">
             <h1> Sản phẩm trong loại {loai['ten_loai']} </h1>
-            {/* <div id="data">
-                {list_sp.map( (sp, index) => 
-                    <div className="sp" key={index}>
-                        <h4> <Link to={ "/sp/" + sp.id_sp } > {sp['ten_sp']} </Link> </h4>
-                        <img src = {sp['hinh']} alt= {sp['ten_sp']}/>
-                    </div>
-                )}
-            </div> */}
             <PhanTrang listSP={list_sp} pageSize={6} />
         </div>
     )

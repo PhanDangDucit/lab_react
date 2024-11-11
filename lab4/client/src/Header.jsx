@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 export default function Header() {
     return (
@@ -29,6 +30,7 @@ export default function Header() {
                         <button className="btn btn-outline-success" type="submit">Search</button>
                     </form>
                 </div>
+                <Link to="/showcart">Cart</Link> 
             </nav>
             {/* Background image */}
             <div 

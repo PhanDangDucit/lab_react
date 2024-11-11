@@ -19,7 +19,7 @@ export default function ThanhToan() {
             alert("Bạn chưa chọn sản phẩm nào");
             return;
         }
-        let url = "http://localhost:3000/luudonhang";
+        let url = "http://localhost:3500/luudonhang";
         let tt = {
             ho_ten:htRef.current.value,
             email:emRef.current.value 
@@ -32,6 +32,7 @@ export default function ThanhToan() {
         fetch(url, opt)
             .then(res => res.json() )
             .then(data => { 
+                console.log("data: " + JSON.stringify(data));
                 if (data.id_dh < 0) console.log("Lỗi lưu đơn hàng", data)
                 else {
                     let id_dh = data.id_dh;
@@ -42,7 +43,7 @@ export default function ThanhToan() {
     } //submitDuLieu
     
     const luuchitietdonhang = (id_dh, cart) => {
-        let url = "http://localhost:3000/luugiohang";
+        let url = "http://localhost:3500/luugiohang";
         cart.forEach(sp => {
         let t = { id_dh: id_dh, id_sp: sp.id, so_luong: sp.so_luong}
         let opt={ method:"post",
@@ -65,7 +66,7 @@ export default function ThanhToan() {
                 <label>Họ tên</label> 
                 <input type="text" ref={htRef}/>
             </div>     
-            <div> 
+            <div>
                 <label>Email</label> 
                 <input type="email" ref={emRef}/>
             </div>
