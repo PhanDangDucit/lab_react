@@ -203,7 +203,7 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 900px;
+  /* width: 900px; */
 }
 
 
@@ -237,12 +237,16 @@ tr {
 }
 
 th {
-  width: 250px;
+  /* width: 250px; */
   text-align: left;
   font-size: 20px;
 }
 
 td {
-  width: 250px;
+  /* width: 250px; */
   font-size: 20px;
+}
+
+.table_hinh_sp_search {
+  width: 100px;
 }

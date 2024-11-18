@@ -50,6 +50,15 @@ app.get('/sp/:id', async function(req, res) {
     return res.json(result[0]);
 });
 
+app.get('/listsp', async function(req, res) {
+    const db = await connectDb();
+    let sql = `SELECT * FROM san_pham`
+    
+    const [result] = await db.query( sql );
+    if (!result) return res.json({"thongbao":"Lỗi lấy danh sách sp", err })
+    return res.json(result);
+});
+
 app.get('/sphot', async function(req, res) {
     const db = await connectDb();
     let sql = `SELECT * FROM san_pham WHERE hot = 1`
@@ -116,15 +125,6 @@ app.post('/luugiohang/', async function (req, res) {
         return res.json({"thongbao": "Lỗi lưu sp", error })
     }
 })
-
-app.get("/search", (req, res) => {
-    const { q } = req.query;
-    const search = (data) => {
-      return data.filter((item) =>
-        keys.some((key) => item[key].toLowerCase().includes(q))
-      );
-    };
-});
 
 // nơi định nghĩa các đường route
 
