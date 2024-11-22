@@ -1,0 +1,21 @@
+
+GET http://localhost:3500/admin/sp/1
+
+###
+GET http://localhost:3500/admin/sp
+
+###
+GET http://localhost:3500/admin/users
+
+###
+PUT http://localhost:3500/admin/sp/1
+Content-Type: application/json
+
+{
+    "ten_sp":"MSI MacBook Pro 1155G7",
+    "gia": "5639577",
+    "gia_km": "3269887"
+}
+
+###
+DELETE http://localhost:3500/admin/sp/3
