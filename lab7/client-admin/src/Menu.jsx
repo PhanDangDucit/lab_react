@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom"
-class Menu extends React.Component{
-    render(){ 
+
+class Menu extends React.Component {
+    render() {
         return (
             <nav className="navbar navbar-expand-lg">
                 <div className="container-fluid">
@@ -56,6 +57,12 @@ class Menu extends React.Component{
                                     <li><Link className="dropdown-item" href="#">Xem đơn hàng mới</Link></li>
                                     <li><Link className="dropdown-item" href="#">Danh sách đơn hàng</Link></li>
                                 </ul>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to={"/download"} >Download</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to={"/dangnhap"} >Đăng nhập</Link>
                             </li>
                         </ul>
                     </div>

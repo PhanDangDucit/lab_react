@@ -1,0 +1,5 @@
+```bash
+$ openssl genrsa -out private-key.txt
+
+$ openssl rsa -in private-key.txt -pubout -out public-key.txt
+```
