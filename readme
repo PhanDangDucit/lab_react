@@ -1,9 +1,0 @@
-```bash
-$ npm create vite
-
-$ npm install express mysql cors nodemon
-
-$ npm install react-paginate
-
-$ npm install react-redux  @reduxjs/toolkit
-```
