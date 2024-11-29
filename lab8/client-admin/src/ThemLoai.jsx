@@ -1,19 +1,19 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 /**
  * loai: id, ten_loai, slug, thu_tu, an_hien, created_at, updated_at
  */
 export function ThemLoaiSP() {
-    const [sp, setSp] = useState({});
+    const [loai, setLoai] = useState({});
     // let sp = {};
-    console.log("sp:", JSON.stringify(sp))
+    console.log("sp:", JSON.stringify(loai))
     const submitDuLieu = () => {
         let url = "http://localhost:3500/admin/loai";
         let opt = {
             method: "post",
+            // id, ten_loai, slug, thu_tu, an_hien, created_at, updated_at
             body: JSON.stringify({
-                ...sp, 
-                id_loai: 1, 
-                tinh_chat:1
+                ...loai
             }),
             headers: { 'Content-Type': 'application/json' }
         };
@@ -24,96 +24,66 @@ export function ThemLoaiSP() {
             .then(res => res.json() )
             .then(data => {
                 console.log('Đã thêm');
-                setSp({});
+                setLoai({});
             })
     }//submitDuLieu
 
     return (
-            <form id="frmaddsp">
-                <h2>Thêm sản phẩm</h2>
-                <div className="row mb-3">
-                    <div className='col'>Tên SP
-                        <input 
-                            type="text"
-                            className="form-control"
-                            value={sp.ten_sp ?? ""}
-                            onChange={ 
-                                e => setSp({
-                                    ...sp, 
-                                    ten_sp: e.target.value
-                                })
-                            }
-                        />
-                    </div>
-                    <div className='col'>Giá 
-                        <input 
-                            type="number" 
-                            className="form-control" 
-                            value={sp.gia ?? 0}
-                            onChange={
-                                e => setSp({
-                                    ...sp, 
-                                    gia: e.target.value
-                                })
-                            } 
-                        />
-                    </div>
-                    <div className='col'>Giá KM 
-                        {/* <input type="number" className="form-control"/> */}
-                        <input 
-                            type="number" 
-                            className="form-control" 
-                            value={sp.gia_km ?? ""}
-                            onChange={ 
-                                e => setSp({
-                                    ...sp, 
-                                    gia_km: e.target.value
-                                })
-                            }
-                        />
-                    </div>
+        <form id="frmaddsp">
+            <h2>Thêm sản phẩm</h2>
+            <div className="row mb-3">
+                <div className='col'>Tên Loại
+                    <input 
+                        type="text"
+                        className="form-control"
+                        value={loai.ten_loai ?? ""}
+                        onChange={ 
+                            e => setLoai({
+                                ...loai, 
+                                ten_loai: e.target.value
+                            })
+                        }
+                    />
                 </div>
-                <div className="row mb-3">
-                    <div className='col'>Hình 
-                        <input type="text" className="form-control" onChange={ e => sp.hinh = e.target.value}/>
-                    </div>
-                    <div className='col'>Ngày
-                        <input 
-                            type="date" 
-                            className="form-control" 
-                            value={sp.ngay ?? ""}
-                            onChange={
-                                e => setSp({
-                                    ...sp, 
-                                    ngay: e.target.value
-                                })
-                            }
-                        />
-                    </div>
-                    <div className='col'>Lượt xem 
-                        <input 
-                            type="number" 
-                            className="form-control" 
-                            value={sp.luot_xem ?? ""}
-                            onChange={ 
-                                e => setSp({
-                                    ...sp, 
-                                    luot_xem: e.target.value
-                                })
-                            } 
-                        />
-                    </div>
+                <div className='col'>Ẩn hiện
+                    <input 
+                        type="text"
+                        className="form-control"
+                        value={loai.an_hien ?? ""}
+                        onChange={ 
+                            e => setLoai({
+                                ...loai, 
+                                an_hien: e.target.value
+                            })
+                        }
+                    />
                 </div>
-                <div className='mb-3'>
-                    <button 
-                        className="btn btn-warning" 
-                        type="button" 
-                        onClick={ () => submitDuLieu()} 
-                    > 
-                        Thêm sản phẩm
-                    </button> &nbsp;
-                    <a href="/admin/sp" className='btn btn-info'>Danh sách</a>
+            </div>
+            <div className="row mb-3">
+                <div className='col'>Thứ tự
+                    <input 
+                        type="number" 
+                        className="form-control" 
+                        value={loai.thu_tu ?? ""}
+                        onChange={ 
+                            e => setLoai({
+                                ...loai, 
+                                thu_tu: e.target.value
+                            })
+                        } 
+                    />
                 </div>
-            </form>
+            </div>
+            <div className='mb-3'>
+                <button 
+                    className="btn btn-warning" 
+                    type="button" 
+                    onClick={ () => submitDuLieu()} 
+                > 
+                    Thêm loại
+                </button> &nbsp;
+                <Link to="/admin/loai" className='btn btn-info'>Danh sách</Link>
+            </div>
+        </form>
     )
 }

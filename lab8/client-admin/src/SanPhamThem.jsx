@@ -1,7 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SanPhamThem() {
     const [sp, setSp] = useState({});
+    const [dsloai, setDsLoai] = useState([]);
+    useEffect(() => {
+        const url = "http://localhost:3500/admin/loai?limit=20&offset=0";
+        fetch(url)
+            .then(res => res.json() )
+            .then(data => {
+                setDsLoai(data);
+            })
+    }, [])
     // let sp = {};
     console.log("sp:", JSON.stringify(sp))
     const submitDuLieu = () => {
@@ -102,6 +111,23 @@ export default function SanPhamThem() {
                         />
                     </div>
                 </div>
+                <select
+                    className="form-select mb-3" 
+                    aria-label="Default select example"
+                    onChange={(e) => setSp({
+                        ...sp,
+                        id_loai: e.target.value
+                    })}
+                >
+                        <option selected>Open this select menu</option>
+                    {
+                        dsloai.map(
+                            loai => (
+                                <option value={loai.id} key={loai.id}>{loai.ten_loai}</option>
+                            )
+                        )
+                    }
+                </select>
                 <div className='mb-3'>
                     <button 
                         className="btn btn-warning" 

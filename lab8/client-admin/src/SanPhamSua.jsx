@@ -5,9 +5,17 @@ import { useNavigate } from "react-router-dom";
 
 export function SanPhamSua() {
     let { id } = useParams();
-    const [sp, ganSP] = useState([]);
+    const [sp, ganSP] = useState({});
     const navigate = useNavigate();
-
+    const [dsloai, setDsLoai] = useState([]);
+    useEffect(() => {
+        const url = "http://localhost:3500/admin/loai?limit=20&offset=0";
+        fetch(url)
+            .then(res => res.json() )
+            .then(data => {
+                setDsLoai(data);
+            })
+    }, [])
     useEffect(() => {
         const api = `http://localhost:3500/admin/sp/${id}`;
         fetch(api)
@@ -22,7 +30,8 @@ export function SanPhamSua() {
             method: "put",
             body: JSON.stringify({
                 ...sp,
-                ngay: formatDate(sp.ngay)
+                ngay: formatDate(sp.ngay),
+                
             }),
             headers: { 'Content-Type': 'application/json' }
         };
@@ -51,10 +60,25 @@ export function SanPhamSua() {
         return [year, month, day].join('-');
     }
 
+    function isMatch(sp) {
+        if(dsloai.length > 0 && sp.id_loai) {
+            const loaiMatch = dsloai.find(loai => loai.id == sp.id_loai);
+            console.log("=========");
+            console.log("sp::", sp);
+            console.log("loaiMatch: ", loaiMatch)
+            if(loaiMatch) {
+                return loaiMatch.ten_loai;
+            }
+            return ""
+        }
+        return ""
+    }
+    
+
     console.log("sp.ngay: ", sp.ngay)
     return (
             <form id="frmaddsp">
-                <h2>Thêm sản phẩm</h2>
+                <h2>Sửa sản phẩm</h2>
                 <div className="row mb-3">
                     <div className='col'>Tên SP
                         <input 
@@ -128,6 +152,24 @@ export function SanPhamSua() {
                         />
                     </div>
                 </div>
+                <select
+                    className="form-select mb-3" 
+                    aria-label="Default select example"
+                    onChange={(e) => ganSP({
+                        ...sp,
+                        id_loai: e.target.value
+                    })}
+                    // defaultValue={sp.id_loai}
+                >
+                        <option selected={sp.id_loai}>{isMatch(sp)}</option>
+                    {
+                        dsloai.map(
+                            loai => (
+                                <option value={loai.id} key={loai.id}>{loai.ten_loai}</option>
+                            )
+                        )
+                    }
+                </select>
                 <div className='mb-3'>
                     <button 
                         className="btn btn-warning" 

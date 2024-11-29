@@ -44,6 +44,17 @@ app.put('/admin/sp/:id', async function (req, res) {
     if (!result) return  res.json({"thongbao": "Lỗi cập nhật sp", err })
     return res.json({"thongbao": "Đã cập nhật sp" });
 });
+
+app.put('/admin/loai/:id', async function (req, res) {
+    const db = await connectDb();
+
+    let data = req.body;
+    let id = req.params.id;
+    let sql = 'UPDATE loai SET? WHERE id= ?';
+    const result = await db.query(sql, [data, id]);
+    if (!result) return  res.json({"thongbao": "Lỗi cập nhật sp", err })
+    return res.json({"thongbao": "Đã cập nhật sp" });
+});
 // http://localhost:3500/sp/${id}
 
 /**
@@ -87,6 +98,7 @@ app.post('/luudonhang/', async function (req, res) {
         return res.json({"id_dh":-1, "thongbao": "Lỗi lưu đơn hàng", error })
     }
 });
+
 app.post('/luugiohang/', async function (req, res) {
     const db = await connectDb();
 
@@ -112,6 +124,20 @@ app.post('/admin/sp', async function(req, res) {
         return res.json({"thongbao": "Đã chèn 1 sp" }); 
     } catch (error) {
         return res.json({"thongbao": "Lỗi chèn 1 sp", error })
+    }
+});
+
+// insert loai
+app.post('/admin/loai', async function(req, res) {
+    const db = await connectDb();
+
+    let data = req.body;
+    let sql = 'INSERT INTO loai SET ?';
+    try {
+        await db.query(sql, data);
+        return res.json({"thongbao": "Đã chèn 1 loai" }); 
+    } catch (error) {
+        return res.json({"thongbao": "Lỗi chèn 1 loai", error })
     }
 });
 
@@ -178,13 +204,39 @@ app.get('/loai/:id_loai', async function (req, res) {
     return res.json(result);
 });
 
+app.get('/admin/loai/:id_loai', async function (req, res) {
+    const db = await connectDb();
+    let id_loai = parseInt(req.params.id_loai );
+    if (isNaN(id_loai) | id_loai<=0) {
+        res.json({"thong bao": "Không biết loại", "id_loai": id_loai}); return;
+    }
+    let sql = `SELECT * FROM loai WHERE id=?`;
+    
+    const [result] = await db.query(sql, id_loai);
+    if (!result) return  res.json({"thongbao": "Lỗi lấy loại: ", err })
+    return res.json(result);
+});
+
+app.get('/admin/loai', async function (req, res) {
+    const db = await connectDb();
+    const {
+        limit, 
+        offset
+    } = req.query;
+    let sql = `SELECT * FROM loai ORDER BY created_at desc limit ${limit} offset ${offset}` ;
+
+    const [result] = await db.query(sql);
+    if (!result) return  res.json({"thongbao": "Lỗi lấy list sp", err })
+    return res.json(result);
+});
+
 app.get('/admin/sp', async function (req, res) {
     const db = await connectDb();
     const {
         limit, 
         offset
     } = req.query;
-    let sql = `SELECT id, ten_sp, gia, hinh, ngay, luot_xem FROM san_pham ORDER BY ngay desc limit ${limit} offset ${offset}` ;
+    let sql = `SELECT * FROM san_pham ORDER BY ngay desc limit ${limit} offset ${offset}` ;
 
     const [result] = await db.query(sql);
     if (!result) return  res.json({"thongbao": "Lỗi lấy list sp", err })
@@ -193,11 +245,14 @@ app.get('/admin/sp', async function (req, res) {
 
 app.get('/admin/users', async function (req, res) {
     const db = await connectDb();
-
-    let sql = `SELECT * FROM users`;
+    const {
+        limit, 
+        offset
+    } = req.query;
+    let sql = `SELECT * FROM users ORDER BY created_at desc limit ${limit} offset ${offset}` ;
 
     const [result] = await db.query(sql);
-    if (!result) return  res.json({"thongbao": "Lỗi lấy list sp", err })
+    if (!result) return  res.json({"thongbao": "Lỗi lấy list user", err })
     return res.json(result);
 });
 
@@ -229,6 +284,19 @@ app.delete('/admin/sp/:id', async function(req, res) {
         return res.json({"thongbao": "Đã xóa sp" });
     } catch (error) {
         return res.json({"thongbao": "Lỗi khi xóa sp", error })
+    }
+});
+
+app.delete('/admin/loai/:id', async function(req, res) {
+    const db = await connectDb();
+
+    let id =  req.params.id;
+    let sql = 'DELETE FROM loai WHERE id = ?';
+    try {
+        await db.query(sql, id);
+        return res.json({"thongbao": "Đã xóa loai" });
+    } catch (error) {
+        return res.json({"thongbao": "Lỗi khi xóa loai", error })
     }
 });
 
