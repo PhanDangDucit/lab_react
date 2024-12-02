@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import {config} from "dotenv";
 import cors from 'cors';
 import fs from 'fs';
+import multer from 'multer';
+
 import { checkUserPass, getUserInfo } from './utils/user.util';
 const app = exp();
 app.use( [ cors() , exp.json() ] );
@@ -300,9 +302,50 @@ app.delete('/admin/loai/:id', async function(req, res) {
     }
 });
 
-// nơi định nghĩa các đường route
 
+/**
+ * Middleware
+ */
+const uploadImage = (file) =>{
+    if (file.fieldname !== "thumbnail") throw new Error("Image not found!")
+    return file.filename;
+}
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './public/img')
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + '-' + file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
+
+/**
+ * Upload files
+ */
+
+
+app.post('/images/upload', upload.single("thumbnail"), (req, res, next) => {
+    const filename = uploadImage(req.file);
+    return res.json({
+        status: 201,
+        messsage: "Upload image success!",
+        data: {
+            imageUrl: `http://localhost:${3500}/images/${filename}`
+        }
+    });
+});
+
+app.get('/images/:filename', (req, res, next) => {
+    const {filename} = req.params;
+    return res.sendFile("img/" + filename, {root: "public"});
+})
+
+// nơi định nghĩa các đường route
 const port = process.env.PORT || 3999
+
 
 app.listen(port, 
     () => console.log(`Ung dung dang chay voi port ${port}`)

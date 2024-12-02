@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { FormUploadImage } from "./components/form-upload-image";
+import { Link } from "react-router-dom";
 
 export default function SanPhamThem() {
     const [sp, setSp] = useState({});
@@ -82,7 +84,8 @@ export default function SanPhamThem() {
                 </div>
                 <div className="row mb-3">
                     <div className='col'>Hình 
-                        <input type="text" className="form-control" onChange={ e => sp.hinh = e.target.value}/>
+                            <FormUploadImage sp={sp} setSp={setSp}/>
+                        {/* <input type="text" className="form-control" onChange={ e => sp.hinh = e.target.value}/> */}
                     </div>
                     <div className='col'>Ngày
                         <input 
@@ -112,7 +115,7 @@ export default function SanPhamThem() {
                     </div>
                 </div>
                 <select
-                    className="form-select mb-3" 
+                    className="form-select mb-3 w-25" 
                     aria-label="Default select example"
                     onChange={(e) => setSp({
                         ...sp,
@@ -128,6 +131,28 @@ export default function SanPhamThem() {
                         )
                     }
                 </select>
+                <div className="d-flex my-3">
+                    <div>
+                        <input type="radio" name="hide_show" 
+                            onChange={() => setSp({
+                                ...sp, 
+                                an_hien: 0
+                            })}
+                            checked={sp.an_hien === 0}
+                            /> Ẩn
+                    </div>
+                    
+                    <div className="mx-5">
+                        <input type="radio" name="hide_show"
+                            onChange={() => setSp({
+                                ...sp, 
+                                an_hien: 1
+                            })}
+                            checked={sp.an_hien === 1}
+                        /> Hiện
+                    </div>
+                </div>
+
                 <div className='mb-3'>
                     <button 
                         className="btn btn-warning" 
@@ -136,8 +161,9 @@ export default function SanPhamThem() {
                     > 
                         Thêm sản phẩm
                     </button> &nbsp;
-                    <a href="/admin/sp" className='btn btn-info'>Danh sách</a>
+                    <Link to="/admin/sp" className='btn btn-info'>Danh sách</Link>
                 </div>
+               
             </form>
     )
 }

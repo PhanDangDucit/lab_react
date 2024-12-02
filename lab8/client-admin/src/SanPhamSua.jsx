@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { FormUploadImage } from "./components/form-upload-image";
 
 export function SanPhamSua() {
     let { id } = useParams();
@@ -122,8 +123,8 @@ export function SanPhamSua() {
                     </div>
                 </div>
                 <div className="row mb-3">
-                    <div className='col'>Hình 
-                        <input type="text" className="form-control" onChange={ e => sp.hinh = e.target.value}/>
+                    <div className='col'><p className="mx-2">Hình</p> 
+                        <FormUploadImage sp={sp} setSp={ganSP}/>
                     </div>
                     <div className='col'>Ngày
                         <input 
@@ -153,7 +154,7 @@ export function SanPhamSua() {
                     </div>
                 </div>
                 <select
-                    className="form-select mb-3" 
+                    className="form-select mb-3 w-25" 
                     aria-label="Default select example"
                     onChange={(e) => ganSP({
                         ...sp,
@@ -170,6 +171,29 @@ export function SanPhamSua() {
                         )
                     }
                 </select>
+
+                <div className="d-flex my-3">
+                    <div>
+                        <input type="radio" name="hide_show" 
+                            onChange={() => ganSP({
+                                ...sp, 
+                                an_hien: 0
+                            })}
+                            checked={sp.an_hien === 0}
+                            /> Ẩn
+                    </div>
+                    
+                    <div className="mx-5">
+                        <input type="radio" name="hide_show"
+                            onChange={() => ganSP({
+                                ...sp, 
+                                an_hien: 1
+                            })}
+                            checked={sp.an_hien === 1}
+                        /> Hiện
+                    </div>
+                </div>
+
                 <div className='mb-3'>
                     <button 
                         className="btn btn-warning" 

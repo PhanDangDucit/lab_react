@@ -25,10 +25,10 @@ function SanPhamList() {
             .then(data => {
                 ganListSP(data)
             })
-        }, [offset]);
+    }, [offset]);
 
     const xoaSP = (id) => {
-        if (window.confirm('Xóa thật không bồ')===false) return false;
+        // if (window.confirm('Xóa thật không bồ')===false) return false;
         fetch(`http://localhost:3500/admin/sp/${id}`, {
             method: "delete"
         })
@@ -36,7 +36,6 @@ function SanPhamList() {
             .then(() => {
                 const newList = listSP.filter(sp => sp.id !== id);
                 ganListSP(newList);
-                navigate(0)
             });
     };
     function isMatch(sp) {
@@ -57,12 +56,13 @@ function SanPhamList() {
                         <th scope="col">Giá</th>
                         <th scope="col">Ngày</th>
                         <th scope="col">Loại</th>
+                        <th scope="col">Ẩn hiện</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {listSP.map( (sp, index) => (
-                        <tr key={index}>
+                    {listSP.map( (sp) => (
+                        <tr key={nanoid()}>
                             <th>{sp.id}</th>
                             <td>
                                 <div className="">
@@ -73,6 +73,7 @@ function SanPhamList() {
                             <td>{sp.gia.toLocaleString("vi")} VNĐ</td>
                             <td>{new Date(sp.ngay).toLocaleDateString('vi')}</td>
                             <td>{isMatch(sp)}</td>
+                            <td>{sp.an_hien == 1 ?  "Hiện" : "Ẩn"}</td>
                             <td className="d-flex">
                                 <button type="button" className='btn btn-danger' onClick={()=>xoaSP(sp.id)} >Xóa</button>
                                 <Link to={"/admin/spsua/"+sp.id} className='btn btn-primary' >Sửa</Link>
